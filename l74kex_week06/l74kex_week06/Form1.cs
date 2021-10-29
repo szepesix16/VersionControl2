@@ -30,9 +30,9 @@ namespace l74kex_week06
                 startDate = "2020-01-01",
                 endDate = "2020-06-30"
             };
-                var response = mnbService.GetExchangeRates(request);
+            var response = mnbService.GetExchangeRates(request);
 
-                var result = response.GetExchangeRatesResult;
+            var result = response.GetExchangeRatesResult;
             dataGridView1.DataSource = Rates;
 
             var xml = new XmlDocument();
@@ -69,6 +69,20 @@ namespace l74kex_week06
             chartArea.AxisY.MajorGrid.Enabled = false;
             chartArea.AxisY.IsStartedFromZero = false;
         }
-
+        private void GetCurrencies()
+        {
+            MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
+            GetCurrenciesRequestBody request = new GetCurrenciesRequestBody();
+            var response = mnbService.GetCurrencies(request);
+            var result = response.GetCurrenciesResult;
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(result);
+            foreach (XmlElement item in xml.DocumentElement.ChildNodes[0])
+            {
+                string newItem = item.InnerText;
+                //Currency.Add(newItem);
+            }
+            //comboBox1.DataSource = Currency;
+        }
         }
     }
