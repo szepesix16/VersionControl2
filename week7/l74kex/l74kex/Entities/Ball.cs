@@ -10,10 +10,6 @@ namespace l74kex.Entities
 {
     public class Ball : Toy
     {
-        protected override void DrawImage(Graphics g)
-        {
-            g.FillEllipse(new SolidBrush(Color.Blue), 0, 0, Width, Height);
-        }
     
     
         public Ball()
@@ -32,6 +28,17 @@ namespace l74kex.Entities
         public void MoveBall()
         {
             Left += 1;
+        }
+        public SolidBrush BallColor { get; private set; }
+
+        public Ball(Color color)
+        {
+            BallColor = new SolidBrush(color);
+        }
+
+        protected override void DrawImage(Graphics g)
+        {
+            g.FillEllipse(BallColor, 0, 0, Width, Height);
         }
     }
 }
