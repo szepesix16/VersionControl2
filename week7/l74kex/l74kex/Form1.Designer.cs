@@ -35,11 +35,21 @@ namespace l74kex
             this.mainPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
+            // createTimer
+            // 
+            this.createTimer.Enabled = true;
+            this.createTimer.Interval = 3000;
+            // 
+            // conveyorTimer
+            // 
+            this.conveyorTimer.Enabled = true;
+            this.conveyorTimer.Interval = 10;
+            // 
             // mainPanel
             // 
-            this.mainPanel.Location = new System.Drawing.Point(139, 104);
+            this.mainPanel.Location = new System.Drawing.Point(0, 1);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(227, 288);
+            this.mainPanel.Size = new System.Drawing.Size(1121, 588);
             this.mainPanel.TabIndex = 0;
             // 
             // Form1
