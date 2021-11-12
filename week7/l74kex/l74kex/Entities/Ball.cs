@@ -8,8 +8,14 @@ using System.Windows.Forms;
 
 namespace l74kex.Entities
 {
-    public class Ball : Label
+    public class Ball : Toy
     {
+        protected override void DrawImage(Graphics g)
+        {
+            g.FillEllipse(new SolidBrush(Color.Blue), 0, 0, Width, Height);
+        }
+    
+    
         public Ball()
         {
             AutoSize = false;
@@ -21,11 +27,6 @@ namespace l74kex.Entities
         private void Ball_Paint(object sender, PaintEventArgs e)
         {
             DrawImage(e.Graphics);
-        }
-
-        protected void DrawImage(Graphics g)
-        {
-            g.FillEllipse(new SolidBrush(Color.Blue), 0, 0, Width, Height);
         }
 
         public void MoveBall()
