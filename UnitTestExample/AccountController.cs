@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
 using System;
 using System.Activities;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using UnitTestExample.Abstractions;
+using UnitTestExample.Entities;
 
 namespace UnitTestExample
 {
@@ -23,11 +26,26 @@ namespace UnitTestExample
             var accountController = new AccountController();
 
             var actualResult = accountController.Register(email, password);
+            var accountServiceMock = new Mock<IAccountManager>(MockBehavior.Strict);
+            accountServiceMock
+                .Setup(m => m.CreateAccount(It.IsAny<Account>()))
+                .Returns<Account>(a => a);
+            var accountController = new AccountController();
+            accountController.AccountManager = accountServiceMock.Object;
+
+            
+            var actualResult = accountController.Register(email, password);
 
             Assert.AreEqual(email, actualResult.Email);
             Assert.AreEqual(password, actualResult.Password);
             Assert.AreNotEqual(Guid.Empty, actualResult.ID);
         }
+
+        internal object ValidateEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         [
         Test,
         TestCase("irf@uni-corvinus", "Abcd1234"),
@@ -60,6 +78,32 @@ namespace UnitTestExample
             var number = new Regex(@"[0-9]+");
             var eightlong = new Regex(@".{8},");
             return lowerCase.IsMatch(password) && upperCase.IsMatch(password) && number.IsMatch(password) && eightlong.IsMatch(password);
+        }
+        [
+    Test,
+    TestCase("irf@uni-corvinus.hu", "Abcd1234")
+]
+        public void TestRegisterApplicationException(string newEmail, string newPassword)
+        {
+            
+            var accountServiceMock = new Mock<IAccountManager>(MockBehavior.Strict);
+            accountServiceMock
+                .Setup(m => m.CreateAccount(It.IsAny<Account>()))
+                .Throws<ApplicationException>();
+            var accountController = new AccountController();
+            accountController.AccountManager = accountServiceMock.Object;
+
+           
+            try
+            {
+                var actualResult = accountController.Register(newEmail, newPassword);
+                Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOf<ApplicationException>(ex);
+            }
+
         }
     }
 
