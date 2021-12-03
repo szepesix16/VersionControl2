@@ -16,6 +16,7 @@ namespace l74kex_week09.Entities
         {
             IsAlive = true;
         }
+        
 
     }
 }

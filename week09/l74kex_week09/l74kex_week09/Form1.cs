@@ -23,8 +23,46 @@ namespace l74kex_week09
             Population = GetPopulation(@"C:\Users\Xavi\Downloads\nép.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Users\Xavi\Downloads\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Users\Xavi\Downloads\halál.csv");
+            Random rng = new Random(1234);
+            for (int year = 2005; year <= 2024; year++)
+            {
+                for (int i = 0; i < Population.Count; i++)
+                {
+                    
+                }
+            }int nbrOfMales = (from x in Population
+                               where x.Gender == Gender.Male && x.IsAlive
+                               select x).Count();
+            int nbrOfFemales = (from x in Population
+                                where x.Gender == Gender.Female && x.IsAlive
+                                select x).Count();
+            Console.WriteLine(
+                string.Format("Év:{0} Fiúk:{1} Lányok:{2}",year, nbrOfMales, nbrOfFemales));
         }
-
+        private void SimStep(int year, Person person)
+        {
+            if (!person.IsAlive) return;
+            byte age = (byte)(year - person.BirthYear);
+            double pDeath = (from x in DeathProbabilities
+                             where x.Gender == person.Gender && x.Age == age
+                             select x.P).FirstOrDefault();
+            if (rng.NextDouble() <= pDeath)
+                person.IsAlive = false;
+            if (person.IsAlive && person.Gender == Gender.Female)
+            {
+                double pBirth = (from x in BirthProbabilities
+                                 where x.Age == age
+                                 select x.P).FirstOrDefault();
+                if (rng.NextDouble() <= pBirth)
+                {
+                    Person ujszulott = new Person();
+                    ujszulott.BirthYear = year;
+                    ujszulott.NbrOfChildren = 0;
+                    ujszulott.Gender = (Gender)(rng.next(1, 3));
+                    Population.Add(ujszulott);
+                }
+            }
+        }
         public List<Person> GetPopulation(string csvpath)
         {
             List<Person> population = new List<Person>();
@@ -53,7 +91,7 @@ namespace l74kex_week09
                     var line = sr.ReadLine().Split(';');
                     birth.Add(new BirthProbability()
                     {
-                        BirthYear = int.Parse(line[0]),
+                        Age = int.Parse(line[0]),
                         NbrOfChildren = int.Parse(line[1]),
                         P = double.Parse(line[2])
                     });
@@ -72,7 +110,7 @@ namespace l74kex_week09
                     death.Add(new DeathProbability()
                     {
                         Gender = (Gender)Enum.Parse(typeof(Gender), line[0]),
-                        BirthYear = int.Parse(line[1]),
+                        Age = int.Parse(line[1]),
                         P = double.Parse(line[2])
                     });
                 }
