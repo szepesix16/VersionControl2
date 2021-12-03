@@ -120,11 +120,30 @@ namespace l74kex_week09
             return death;
         }
 
+        public void DisplayResult()
+        {
+            for (int year = 2005; year <= numericUpDown1.Value; year++)
+            {
+                int i = 0;
+                richTextBox1.Text += "Szimulációs év:" + year + "\n\t Férfiak:" + NbrOfMales[i] + "\n\t Nők:" + NbrOfFemales[i] + "\n\n";
+                i++;
+            }
+            
+        }
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             textBox1.Clear();
-            textBox1.Text = ofd;
+            if (ofd.ShowDialog()==DialogResult.OK)
+                {
+                textBox1.Text = ofd.FileName;
+                }
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            SimStep();
+            DisplayResult();
         }
     }   
 }
