@@ -17,27 +17,29 @@ namespace l74kex_week09
         List<Person> Population = new List<Person>();
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
+        Random rng = new Random(1234);
         public Form1()
         {
             InitializeComponent();
             Population = GetPopulation(@"C:\Users\Xavi\Downloads\nép.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Users\Xavi\Downloads\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Users\Xavi\Downloads\halál.csv");
-            Random rng = new Random(1234);
+
             for (int year = 2005; year <= 2024; year++)
             {
                 for (int i = 0; i < Population.Count; i++)
                 {
-                    
+                    SimStep(year, Population[i]);
                 }
-            }int nbrOfMales = (from x in Population
-                               where x.Gender == Gender.Male && x.IsAlive
-                               select x).Count();
-            int nbrOfFemales = (from x in Population
-                                where x.Gender == Gender.Female && x.IsAlive
-                                select x).Count();
-            Console.WriteLine(
-                string.Format("Év:{0} Fiúk:{1} Lányok:{2}",year, nbrOfMales, nbrOfFemales));
+                int nbrOfMales = (from x in Population
+                                  where x.Gender == Gender.Male && x.IsAlive
+                                  select x).Count();
+                int nbrOfFemales = (from x in Population
+                                    where x.Gender == Gender.Female && x.IsAlive
+                                    select x).Count();
+                Console.WriteLine(
+                    string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, nbrOfMales, nbrOfFemales));
+            }
         }
         private void SimStep(int year, Person person)
         {
@@ -58,7 +60,7 @@ namespace l74kex_week09
                     Person ujszulott = new Person();
                     ujszulott.BirthYear = year;
                     ujszulott.NbrOfChildren = 0;
-                    ujszulott.Gender = (Gender)(rng.next(1, 3));
+                    ujszulott.Gender = (Gender)(rng.Next(1, 3));
                     Population.Add(ujszulott);
                 }
             }
@@ -116,6 +118,13 @@ namespace l74kex_week09
                 }
             }
             return death;
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            textBox1.Clear();
+            textBox1.Text = ofd;
         }
     }   
 }
