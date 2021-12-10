@@ -15,6 +15,10 @@ namespace l74kex_week11
     {
         GameController gc = new GameController();
         GameArea ga;
+        int populationSize = 100;
+        int nbrOfSteps = 10;
+        int nbrOfStepsIncrement = 10;
+        int generation = 1;
 
         public Form1()
         {
@@ -22,6 +26,22 @@ namespace l74kex_week11
 
             ga = gc.ActivateDisplay();
             this.Controls.Add(ga);
+            int nbrOfPlayers = populationSize;
+
+            gc.GameOver += Gc_GameOver;
+
+            for (int i = 0; i < populationSize; i++)
+            {
+                gc.AddPlayer(nbrOfSteps);
+            }
+            gc.Start();
+        }
+        private void Gc_GameOver(object sender)
+        {
+            generation++;
+            label1.Text = string.Format(
+                "{0}. generáció",
+                generation);
         }
     }
 }
