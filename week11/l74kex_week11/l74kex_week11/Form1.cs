@@ -48,6 +48,7 @@ namespace l74kex_week11
                              orderby p.GetFitness() descending
                              select p;
             var topPerformers = playerList.Take(populationSize / 2).ToList();
+            Brain winnerBrain = null;
             foreach (var p in topPerformers)
             {
                 var b = p.Brain.Clone();
@@ -62,6 +63,15 @@ namespace l74kex_week11
                     gc.AddPlayer(b.Mutate());
             }
             gc.Start();
+            var winners = from p in topPerformers
+                          where p.IsWinner
+                          select p;
+            if (winners.Count() > 0)
+            {
+                winnerBrain = winners.FirstOrDefault().Brain.Clone();
+                gc.GameOver -= Gc_GameOver;
+                return;
+            }   
         }
 
     }
