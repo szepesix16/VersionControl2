@@ -19,6 +19,7 @@ namespace l74kex_week11
         int nbrOfSteps = 10;
         int nbrOfStepsIncrement = 10;
         int generation = 1;
+        Brain winnerBrain = null;
 
         public Form1()
         {
@@ -48,7 +49,7 @@ namespace l74kex_week11
                              orderby p.GetFitness() descending
                              select p;
             var topPerformers = playerList.Take(populationSize / 2).ToList();
-            Brain winnerBrain = null;
+            
             foreach (var p in topPerformers)
             {
                 var b = p.Brain.Clone();
@@ -74,5 +75,13 @@ namespace l74kex_week11
             }   
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gc.ResetCurrentLevel();
+            gc.AddPlayer(winnerBrain.Clone());
+            gc.AddPlayer();
+            ga.Focus();
+            gc.Start(true);
+        }
     }
 }
